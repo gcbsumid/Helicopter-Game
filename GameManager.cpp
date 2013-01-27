@@ -19,7 +19,7 @@
 
 using namespace std;
 
-const int pauseTextLength = 23;
+const int pauseTextLength = 27;
 static string pauseText[] = 
 {
     "Helicopter Side Scrolling Game",
@@ -34,7 +34,9 @@ static string pauseText[] =
     "G", "Activate God Mode",
     "Left Arrow", "Decrease game speed",
     "Right Arrow", "Increase game speed",
-    "Left Click/F", "Pause Game"
+    "Left Click/F", "Pause Game",
+    "N", "Super Mega Snowflake bomb. Pressing N",
+    "", "explodes the bomb up to 3 times."
 };
 
 // Function that puts out an error when it exits

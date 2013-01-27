@@ -10,6 +10,7 @@ Gameplay
     - implemented double buffering
     - Increasing and Decreasing the speed of the game
     - God Mode (No collision against the helichopter) press 
+    - Created a snowflake bomb by pressing "N". The player can press N up to 3 times.
 
 Maps
     - Randomly generate a map as the game progresses.

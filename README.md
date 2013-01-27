@@ -1,5 +1,7 @@
 Helicopter Side Scroller Game
 
+Note: There are so many hacks in here. I should probably fix them and implement them better. However, because this is due tomorrow (friday, Jan 24, 2013) and they won't check the code structure, I'll leave it as is. I am however still ashamed at the ugliness of this code. I expected better. I was just somewhat lazy.
+
 Enhancements:
 
 Gameplay
@@ -9,7 +11,7 @@ Gameplay
         - created a score counter that is incremented whenever the player destroys an enemy turret (1 point) and enemy aircrafts (3 points)
     - implemented double buffering
     - Increasing and Decreasing the speed of the game
-    - God Mode (No collision against the helichopter) press 
+    - God Mode (No collision against the helichopter) press     - Created a snowflake bomb by pressing "N". The player can press N up to 3 times.
 
 Maps
     - Randomly generate a map as the game progresses.
