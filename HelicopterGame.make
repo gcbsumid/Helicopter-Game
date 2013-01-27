@@ -8,7 +8,7 @@ CXX = g++
 CXXFLAGS = -g -MMD
 LINKERFLAGS = -lX11 -L/usr/X11R6/lib
 
-OBJECTS = main.o GameManager.o PhysicsManager.o MapManager.o AIManager.o PlaneManager.o HelichopterManager.o WallObj.o TargetObj.o MissileObj.o HelichopterObj.o PlaneObj.o Objects.o ObjectsFactory.o
+OBJECTS = main.o GameManager.o PhysicsManager.o MapManager.o AIManager.o PlaneManager.o HelichopterManager.o WallObj.o TargetObj.o MissileObj.o HelichopterObj.o PlaneObj.o Objects.o ExplosiveObj.o ObjectsFactory.o
 
 EXEC = x_game
 
@@ -73,6 +73,11 @@ HelichopterObj.o: HelichopterObj.cpp
 PlaneObj.o: PlaneObj.cpp
 	@echo "building Plane Objects"
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
+ExplosiveObj.o: ExplosiveObj.cpp
+	@echo "building Explosive Objects"
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+
 
 Objects.o: Objects.cpp
 	@echo "building Objects Base class"

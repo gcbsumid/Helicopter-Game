@@ -12,7 +12,8 @@ using namespace std;
 // Constructor
 PhysicsManager::PhysicsManager(HelichopterObj* heli, std::vector<WallObj*>* walls, 
                     std::vector<TargetObj*>* targets, std::vector<MissileObj*>* heliMissiles,
-                    std::vector<MissileObj*>* turretMissiles,  std::vector<PlaneObj*>* planes) : mGodMode(false)
+                    std::vector<MissileObj*>* turretMissiles,  std::vector<PlaneObj*>* planes,
+                    std::vector<ExplosiveObj*>* explosion) : mGodMode(false)
 {
     mHelichopter = heli;
     mWallObjs = walls;
@@ -20,6 +21,7 @@ PhysicsManager::PhysicsManager(HelichopterObj* heli, std::vector<WallObj*>* wall
     mHeliMissileObjs = heliMissiles;
     mTurretMissileObjs = turretMissiles;
     mPlaneObjs = planes;
+    mExplosiveObjs = explosion;
 }
 
 PhysicsManager::~PhysicsManager()
@@ -39,6 +41,9 @@ void PhysicsManager::Update()
 
     vector<MissileObj *>::const_iterator mt_begin = mTurretMissileObjs->begin();
     vector<MissileObj *>::const_iterator mt_end = mTurretMissileObjs->end();
+    
+    vector<ExplosiveObj *>::const_iterator e_begin = mExplosiveObjs->begin();
+    vector<ExplosiveObj *>::const_iterator e_end = mExplosiveObjs->end();
 
     vector<WallObj *>::const_iterator w_begin = mWallObjs->begin();
     vector<WallObj *>::const_iterator w_end = mWallObjs->end();
@@ -78,6 +83,20 @@ void PhysicsManager::Update()
                 missileObj->Destroy();
             }
             mt_begin++;
+        }
+
+        e_begin = mExplosiveObjs->begin();
+        while(e_begin != e_end)
+        {
+            // Check each missile against the helichopter
+            Objects *ExplosiveObj = (Objects*)*e_begin;
+
+            // Check each missile against walls
+            if(HasColided(ExplosiveObj, obj))
+            {
+                ExplosiveObj->Destroy();
+            }
+            e_begin++;
         }
 
         // Incrememnt the wall pointer
@@ -132,6 +151,22 @@ void PhysicsManager::Update()
             mh_begin++;
         }
 
+        e_begin = mExplosiveObjs->begin();
+        while(e_begin != e_end)
+        {
+            // Check each missile against the helichopter
+            Objects *ExplosiveObj = (Objects*)*e_begin;
+
+            // Check each missile against walls
+            if(HasColided(ExplosiveObj, obj))
+            {
+                obj->Destroy();
+                ExplosiveObj->Destroy();
+            }
+            e_begin++;
+        }
+
+
         // Incrememnt the wall pointer
         p_begin++;
     }
@@ -160,6 +195,23 @@ void PhysicsManager::Update()
             }
             mh_begin++;
         }
+
+
+        e_begin = mExplosiveObjs->begin();
+        while(e_begin != e_end)
+        {
+            // Check each missile against the helichopter
+            Objects *ExplosiveObj = (Objects*)*e_begin;
+
+            // Check each missile against walls
+            if(HasColided(ExplosiveObj, obj))
+            {
+                obj->Destroy();
+                ExplosiveObj->Destroy();
+            }
+            e_begin++;
+        }
+
 
         t_begin++;
     }

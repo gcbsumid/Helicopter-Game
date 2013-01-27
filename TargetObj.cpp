@@ -23,7 +23,7 @@ TargetObj::TargetObj(int x, int y, int height, int width) :
 
 void TargetObj::DrawObj(XInfo* xInfo)
 {
-    XFillArc(xInfo->display, xInfo->pixmap, xInfo->gc[2], mPosX, mPosY, getWidth(), getHeight(), 0, 360*32);
+    XDrawArc(xInfo->display, xInfo->pixmap, xInfo->gc[2], mPosX, mPosY, getWidth(), getHeight(), 0, 360*32);
 
     //XFillRectangle(xInfo->display, xInfo->pixmap, xInfo->gc[2], getPosX(), getPosY(), getWidth(), getHeight());
     //cout << "painting" << endl;

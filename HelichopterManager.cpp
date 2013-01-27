@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <cmath>
 #include "HelichopterManager.h"
 #include "Objects.h"
 #include "HelichopterObj.h"
@@ -9,12 +10,24 @@
 
 using namespace std;
 
+static float ExplosionDirection[] = {
+    cos(0)*15,          sin(0)*15,
+    cos(M_PI/4)*15,     sin(M_PI/4)*15,
+    cos(M_PI/2)*15,     sin(M_PI/2)*15,
+    cos(3*M_PI/4)*15,   sin(3*M_PI/4)*15,
+    cos(M_PI)*15,       sin(M_PI)*15,
+    cos(5*M_PI/4)*15,   sin(5*M_PI/4)*15,
+    cos(3*M_PI/2)*15,   sin(3*M_PI/2)*15,
+    cos(7*M_PI/4)*15,   sin(7*M_PI/4)*15
+};
+
 HelichopterManager::HelichopterManager(XInfo* xInfo)
 {
     cout << "Creating Helichopter" << endl;
     Objects* obj = ObjectsFactory::CreateObjects(
         Objects::OBJECT_TYPE_HELICHOPTER, xInfo->width*0.20, xInfo->height *0.15, 30, 50);
     mHelichopter = (HelichopterObj*)obj; 
+    mExplosiveCount = 0;
 }
 
 HelichopterManager::~HelichopterManager()
@@ -84,6 +97,29 @@ void HelichopterManager::Update(XInfo* xInfo, int gameSpeed)
         mt_begin++;
         counter++;
     }
+    // Update Explosive Objects
+    vector<ExplosiveObj *>::const_iterator e_begin = mExplosiveObjs.begin();
+    vector<ExplosiveObj *>::const_iterator e_end = mExplosiveObjs.end();
+    counter = 0;
+    while(e_begin != e_end) 
+    {
+        ExplosiveObj* obj = *e_begin;
+        if(obj->DoesNeedUpdate())
+        {
+            obj->Update(xInfo->width, xInfo->height, gameSpeed);
+        }
+        if(obj->IsToBeDestroyed() || 
+            !obj->IsOnScreen(xInfo->width, xInfo->height))
+        {
+            mExplosiveObjs.erase(mExplosiveObjs.begin()+counter);
+            // Update m_end
+            e_end = mExplosiveObjs.end();
+            e_begin--;
+            counter--;
+        }
+        e_begin++;
+        counter++;
+    }
 
 }
 
@@ -123,6 +159,19 @@ void HelichopterManager::Repaint(XInfo* xInfo)
         }
         mt_begin++;
     }
+
+    vector<ExplosiveObj *>::const_iterator e_begin = mExplosiveObjs.begin();
+    vector<ExplosiveObj *>::const_iterator e_end = mExplosiveObjs.end();
+
+    while(e_begin != e_end)
+    {
+        Objects *o = *e_begin;
+        if(o->IsOnScreen(xInfo->width, xInfo->height))
+        {
+            o->DrawObj(xInfo);
+        }
+        e_begin++;
+    }
 }
 
 HelichopterObj* HelichopterManager::GetHelichopter()
@@ -138,6 +187,11 @@ std::vector<MissileObj*>* HelichopterManager::GetHeliMissileObjs()
 std::vector<MissileObj*>* HelichopterManager::GetTurretMissileObjs()
 {
     return &mTurretMissileObjs;
+}
+
+std::vector<ExplosiveObj*>* HelichopterManager::GetExplosiveObjs()
+{
+    return &mExplosiveObjs;
 }
 
 
@@ -189,4 +243,47 @@ void HelichopterManager::ResetXAcceleration()
 void HelichopterManager::ResetYAcceleration()
 {
     mHelichopter->ResetYAcceleration();
+}
+
+void HelichopterManager::HandleExplosion()
+{
+    if(mExplosiveObjs.empty())
+    {
+        mExplosiveCount = 0;
+        Objects* obj = ObjectsFactory::CreateObjects(
+            Objects::OBJECT_TYPE_EXPLOSION, 
+            mHelichopter->getPosX()+(mHelichopter->getWidth()/2), 
+            mHelichopter->getPosY()+mHelichopter->getHeight()+3, 
+            10, 
+            10);
+        ExplosiveObj* explosiveObj = (ExplosiveObj*)obj;
+        explosiveObj->UpdateVelocity(10, 0);
+        mExplosiveObjs.push_back(explosiveObj);
+    }
+    else
+    {
+        if(mExplosiveCount < 3)
+        {
+            int explosiveNum = mExplosiveObjs.size();
+            for(int explosiveCounter = 0; explosiveCounter < explosiveNum; explosiveCounter++)
+            {
+                ExplosiveObj* o = mExplosiveObjs.at(explosiveCounter);
+
+                for(int i = 0; i < 8; i++)
+                {
+                    Objects* obj = ObjectsFactory::CreateObjects(
+                        Objects::OBJECT_TYPE_EXPLOSION, 
+                        o->getPosX(), 
+                        o->getPosY(), 
+                        10, 
+                        10);
+                    ExplosiveObj* explosiveObj = (ExplosiveObj*)obj;
+                    explosiveObj->UpdateVelocity(ExplosionDirection[i*2], ExplosionDirection[i*2+1]);
+                    mExplosiveObjs.push_back(explosiveObj);
+                }
+                o->Destroy();
+            }
+            mExplosiveCount++;
+        }
+    }
 }

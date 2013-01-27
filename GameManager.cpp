@@ -86,7 +86,8 @@ void GameManager::InitGame()
         mMapManager->GetTargetObjVector(), 
         mHelichopterManager->GetHeliMissileObjs(),
         mHelichopterManager->GetTurretMissileObjs(),
-        mPlaneManager->GetPlaneObjs());
+        mPlaneManager->GetPlaneObjs(),
+        mHelichopterManager->GetExplosiveObjs());
 
     // Create Objects then pass it to the AI Manager
     mAIManager = new AIManager(
@@ -423,6 +424,10 @@ void GameManager::HandleKeyPress(XEvent &event)
     {
         HandleButtonPress(event);
     }
+    if(key == XK_n)
+    {
+        HandleExplosion(event);
+    }
     if(text[0] == ' ')
     {
         HandleFireMissile(true);
@@ -432,6 +437,11 @@ void GameManager::HandleKeyPress(XEvent &event)
 void GameManager::HandleFireMissile(bool isBomb)
 {
     mHelichopterManager->HandleFireMissiles(isBomb);
+}
+
+void GameManager::HandleExplosion(XEvent &event)
+{
+    mHelichopterManager->HandleExplosion();
 }
 
 void GameManager::HandleKeyRelease(XEvent &event)

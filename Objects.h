@@ -25,9 +25,10 @@ public:
         OBJECT_TYPE_MISSILE     = 2,
         OBJECT_TYPE_HELICHOPTER = 3,
         OBJECT_TYPE_PLANE       = 4,
+        OBJECT_TYPE_EXPLOSION   = 5,
 
-        OBJECT_TYPE_LAST        = OBJECT_TYPE_HELICHOPTER,
-        OBJECT_TYPE_COUNT       = 5
+        OBJECT_TYPE_LAST        = OBJECT_TYPE_EXPLOSION,
+        OBJECT_TYPE_COUNT       = 6
     };
 
     virtual ~Objects();

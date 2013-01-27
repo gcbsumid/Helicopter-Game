@@ -20,7 +20,7 @@ WallObj::WallObj(int x, int y, int height, int width) :
 
 void WallObj::DrawObj(XInfo* xInfo) 
 {
-    XDrawRectangle(xInfo->display, xInfo->pixmap, xInfo->gc[2], getPosX(), getPosY(), getWidth(), getHeight());
+    XFillRectangle(xInfo->display, xInfo->pixmap, xInfo->gc[2], getPosX(), getPosY(), getWidth(), getHeight());
     //cout << "painting" << endl;
 }
 

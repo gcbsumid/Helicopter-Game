@@ -46,6 +46,7 @@ private:
     void HandleKeyPress(XEvent &event);
     void HandleKeyRelease(XEvent &event);
     void HandleFireMissile(bool isBomb);
+    void HandleExplosion(XEvent &event);
     void ExposeUpdate();
 
     const int Border; // Define

@@ -4,6 +4,7 @@
 #include "MissileObj.h"
 #include "HelichopterObj.h"
 #include "PlaneObj.h"
+#include "ExplosiveObj.h"
 #include <map>
 
 using namespace std;
@@ -39,6 +40,7 @@ ObjectsFactoryInitializer::ObjectsFactoryInitializer() {
     ObjectsFactory::ObjectsInit[Objects::OBJECT_TYPE_MISSILE] = new MissileObj::Factory;
     ObjectsFactory::ObjectsInit[Objects::OBJECT_TYPE_HELICHOPTER] = new HelichopterObj::Factory;
     ObjectsFactory::ObjectsInit[Objects::OBJECT_TYPE_PLANE] = new PlaneObj::Factory;
+    ObjectsFactory::ObjectsInit[Objects::OBJECT_TYPE_EXPLOSION] = new ExplosiveObj::Factory;
 }
 
 //Static member defination:
